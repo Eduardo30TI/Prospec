@@ -42,12 +42,23 @@ class Menu:
 
                 pass
 
-            if selected in page_dict.keys():
+            if selected=='Sair':
 
-                tela=globals().get(page_dict[selected])()
-                tela.main()
+                os.remove(temp_path)
 
-                pass            
+                pass
+
+            else:
+
+                if selected in page_dict.keys():
+
+                    tela=globals().get(page_dict[selected])()
+                    tela.main()
+
+                    pass
+
+
+                pass         
 
             pass
 
