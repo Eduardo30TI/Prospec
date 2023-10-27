@@ -90,7 +90,7 @@ def main():
 
             st.markdown('<h3>Login</h3>',unsafe_allow_html=True)
             temp_dict['email']=st.text_input('Usuário',label_visibility='visible',key='user').lower()
-            temp_dict['senha']=st.text_input('Senha',label_visibility='visible',key='password').lower()
+            temp_dict['senha']=st.text_input('Senha',label_visibility='visible',key='password',type='password').lower()
             btn_entrar=st.button('Entrar',use_container_width=True,type='primary')
             btn_cad=st.button('Cadastro',use_container_width=True)
 
