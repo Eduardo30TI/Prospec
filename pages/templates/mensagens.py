@@ -305,7 +305,7 @@ class Mensagem:
 
                     campo=driver.find_element(By.CSS_SELECTOR,'p.selectable-text.copyable-text')
                     time.sleep(1)
-                    campo.send_keys(Keys.ENTER)
+                    #campo.send_keys(Keys.ENTER)
 
                     time.sleep(3)
 
