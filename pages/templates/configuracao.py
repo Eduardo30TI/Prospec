@@ -96,6 +96,56 @@ class Configuracoes:
 
                 btn_template=st.button('Salvar',key='save_template',type='primary')
 
+                if btn_template==True:
+
+                    resp=self.ValidarCampos(temp_dict)
+
+                    if 1 in resp.keys():
+
+                        mensagem=st.warning(f'Preencher o campo {resp[1]}')
+                        time.sleep(1)
+                        mensagem.empty()
+
+                        pass
+
+                    else:
+
+                        querys={
+
+                            'INSERT':
+
+                            """
+
+                            INSERT INTO template(TITLE,TEXTO)VALUES('{0}','{1}')
+
+                            """.format(temp_dict['titulo'],temp_dict['mensagem']),
+
+                            'UPDATE':
+
+                            """
+                            
+                            UPDATE template
+                            SET TEXTO='{1}'
+                            WHERE TITLE='{0}'
+
+                            """.format(temp_dict['titulo'],temp_dict['mensagem'])
+                        }
+
+                        count=df['template'].loc[df['template']['TITLE']==temp_dict['titulo'],'TEXTO'].count()
+
+                        tipo='INSERT' if count<=0 else 'UPDATE'
+
+                        sql.Save(querys[tipo])
+
+                        mensagem=st.success('Dados salvo com sucesso')
+                        time.sleep(1)
+                        mensagem.empty()
+                        streamlit_js_eval(js_expressions='parent.window.location.reload()')
+
+                        pass
+
+                    pass             
+
                 pass
 
             with tab2.container():
@@ -121,56 +171,6 @@ class Configuracoes:
                 temp_dict['telefone']=st.text_input('Telefone',placeholder='Inserir o ddd + telefone sem espaço',value=temp_dict['telefone'],key='telefone')
 
                 btn_vend=st.button('Salvar',key='save_vend',type='primary')
-
-                pass
-
-            pass
-
-        if btn_template==True:
-
-            resp=self.ValidarCampos(temp_dict)
-
-            if 1 in resp.keys():
-
-                mensagem=st.warning(f'Preencher o campo {resp[1]}')
-                time.sleep(1)
-                mensagem.empty()
-
-                pass
-
-            else:
-
-                querys={
-
-                    'INSERT':
-
-                    """
-
-                    INSERT INTO template(TITLE,TEXTO)VALUES('{0}','{1}')
-
-                    """.format(temp_dict['titulo'],temp_dict['mensagem']),
-
-                    'UPDATE':
-
-                    """
-                    
-                    UPDATE template
-                    SET TEXTO='{1}'
-                    WHERE TITLE='{0}'
-
-                    """.format(temp_dict['titulo'],temp_dict['mensagem'])
-                }
-
-                count=df['template'].loc[df['template']['TITLE']==temp_dict['titulo'],'TEXTO'].count()
-
-                tipo='INSERT' if count<=0 else 'UPDATE'
-
-                sql.Save(querys[tipo])
-
-                mensagem=st.success('Dados salvo com sucesso')
-                time.sleep(1)
-                mensagem.empty()
-                streamlit_js_eval(js_expressions='parent.window.location.reload()')
 
                 pass
 
