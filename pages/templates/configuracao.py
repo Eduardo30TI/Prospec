@@ -172,75 +172,75 @@ class Configuracoes:
 
                 btn_vend=st.button('Salvar',key='save_vend',type='primary')
 
+                if btn_vend==True:
+
+                    resp=self.ValidarCampos(temp_dict)
+
+                    if 1 in resp.keys():
+
+                        mensagem=st.warning(f'Preencher o campo {resp[1]}')
+                        time.sleep(1)
+                        mensagem.empty()
+
+                        pass
+
+                    else:
+
+                        telefone_ajustado=phonenumbers.parse(temp_dict['telefone'],'BR')
+                        local=geocoder.description_for_number(telefone_ajustado,'pt_br')
+
+                        if local=='':
+
+                            mensagem=st.warning('Telefone invalido')
+                            time.sleep(1)
+                            mensagem.empty()
+
+                            pass
+
+
+                        else:
+
+                            querys={
+
+                                'INSERT':
+
+                                """
+
+                                INSERT INTO vendedor(VENDEDOR,TELEFONE)VALUES('{0}','{1}')
+
+                                """.format(temp_dict['vendedor'],temp_dict['telefone']),
+
+                                'UPDATE':
+
+                                """
+                                
+                                UPDATE vendedor
+                                SET TELEFONE='{1}'
+                                WHERE VENDEDOR='{0}'
+
+                                """.format(temp_dict['vendedor'],temp_dict['telefone'])
+                            }
+
+                            count=df['vendedor'].loc[df['vendedor']['TELEFONE']==temp_dict['telefone'],'TELEFONE'].count()
+
+                            tipo='INSERT' if count<=0 else 'UPDATE'
+
+                            sql.Save(querys[tipo])
+
+                            mensagem=st.success('Dados salvo com sucesso')
+                            time.sleep(1)
+                            mensagem.empty()
+                            streamlit_js_eval(js_expressions='parent.window.location.reload()')
+
+                            pass
+
+                        pass
+
+                    pass                 
+
                 pass
 
             pass
-
-        if btn_vend==True:
-
-            resp=self.ValidarCampos(temp_dict)
-
-            if 1 in resp.keys():
-
-                mensagem=st.warning(f'Preencher o campo {resp[1]}')
-                time.sleep(1)
-                mensagem.empty()
-
-                pass
-
-            else:
-
-                telefone_ajustado=phonenumbers.parse(temp_dict['telefone'],'BR')
-                local=geocoder.description_for_number(telefone_ajustado,'pt_br')
-
-                if local=='':
-
-                    mensagem=st.warning('Telefone invalido')
-                    time.sleep(1)
-                    mensagem.empty()
-
-                    pass
-
-
-                else:
-
-                    querys={
-
-                        'INSERT':
-
-                        """
-
-                        INSERT INTO vendedor(VENDEDOR,TELEFONE)VALUES('{0}','{1}')
-
-                        """.format(temp_dict['vendedor'],temp_dict['telefone']),
-
-                        'UPDATE':
-
-                        """
-                        
-                        UPDATE vendedor
-                        SET TELEFONE='{1}'
-                        WHERE VENDEDOR='{0}'
-
-                        """.format(temp_dict['vendedor'],temp_dict['telefone'])
-                    }
-
-                    count=df['vendedor'].loc[df['vendedor']['TELEFONE']==temp_dict['telefone'],'TELEFONE'].count()
-
-                    tipo='INSERT' if count<=0 else 'UPDATE'
-
-                    sql.Save(querys[tipo])
-
-                    mensagem=st.success('Dados salvo com sucesso')
-                    time.sleep(1)
-                    mensagem.empty()
-                    streamlit_js_eval(js_expressions='parent.window.location.reload()')
-
-                    pass
-
-                pass
-
-            pass        
 
         pass
 
